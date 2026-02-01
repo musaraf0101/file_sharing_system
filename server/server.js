@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 5000;
 const io = new Server(httpServer, {
   cors: {
     origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    methods: ["GET", "POST"],
   },
 });
 
