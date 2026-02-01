@@ -5,19 +5,19 @@ This document breaks down the development of the P2P file sharing application in
 ## Phase 1: Project Setup & Foundations
 **Goal:** Initialize the project environment for both server and client.
 
-- [ ] **1.1. Directory Structure**
-  - [ ] Create root directory with `server` and `client` folders.
-  - [ ] Initialize Git repository.
-- [ ] **1.2. Server Initialization (Node.js)**
-  - [ ] Initialize `package.json`.
-  - [ ] Install dependencies: `express`, `socket.io`, `cors`, `nodemon`, `dotenv`.
-  - [ ] Setup TypeScript configuration (if using TS) or basic ES6 setup.
-  - [ ] Create `server.js` (or `index.ts`) with a basic Express app listener.
-- [ ] **1.3. Client Initialization (React)**
-  - [ ] Initialize React app (Vite recommended).
-  - [ ] Install dependencies: `socket.io-client`, `simple-peer` (or `peerjs` if preferred), `react-router-dom`, `tailwindcss`, `lucide-react`.
-  - [ ] Setup TailwindCSS.
-  - [ ] Create basic folder structure: `components`, `hooks`, `context`, `pages`.
+- [x] **1.1. Directory Structure**
+  - [x] Create root directory with `server` and `client` folders.
+  - [x] Initialize Git repository.
+- [x] **1.2. Server Initialization (Node.js)**
+  - [x] Initialize `package.json`.
+  - [x] Install dependencies: `express`, `socket.io`, `cors`, `nodemon`, `dotenv`.
+  - [x] Setup TypeScript configuration (if using TS) or basic ES6 setup.
+  - [x] Create `server.js` (or `index.ts`) with a basic Express app listener.
+- [x] **1.3. Client Initialization (React)**
+  - [x] Initialize React app (Vite recommended).
+  - [x] Install dependencies: `socket.io-client`, `simple-peer` (or `peerjs` if preferred), `react-router-dom`, `tailwindcss`, `lucide-react`.
+  - [x] Setup TailwindCSS.
+  - [x] Create basic folder structure: `components`, `hooks`, `context`, `pages`.
 
 ## Phase 2: Signaling Server (Backend)
 **Goal:** Build the WebSocket server to handle room management and signaling.
