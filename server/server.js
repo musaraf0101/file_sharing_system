@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import path from "path";
 import { createServer } from "http";
 import { Server } from "socket.io";
 
@@ -16,14 +15,15 @@ const io = new Server(httpServer, {
   },
 });
 
+const FRONTEND_URL = process.env.FRONTEND_URL || "*";
+
 app.use(express.json());
 app.use(
-  cors(
-    cors({
-      origin: "*",
-      methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    }),
-  ),
+  cors({
+    origin: FRONTEND_URL,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    credentials: true,
+  }),
 );
 
 // In-memory store for room state
@@ -95,7 +95,7 @@ app.get("/", (req, res) => {
   res.json({ status: "Backend running 🚀" });
 });
 
-httpServer.listen(PORT, () => {
+httpServer.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on port ${PORT}`);
 });
 
