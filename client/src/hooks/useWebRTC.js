@@ -181,6 +181,8 @@ export const useWebRTC = (roomId) => {
   }, []);
 
   const setupDataChannelListeners = (channel) => {
+    channel.binaryType = 'arraybuffer';
+    
     channel.onopen = () => {
       console.log('Data Channel Open');
       toast.success('P2P Connection Established!');
