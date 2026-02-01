@@ -15,7 +15,11 @@ const PORT = process.env.PORT || 5000;
 // Initialize Socket.IO
 const io = new Server(httpServer, {
   cors: {
-    origin: "*", 
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "https://file-sharing-system-kappa.vercel.app/",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   },
 });
@@ -36,7 +40,7 @@ io.on("connection", (socket) => {
     if (rooms.has(roomId)) {
       return callback({ success: false, message: "Room already exists" });
     }
-// Store room details
+    // Store room details
     rooms.set(roomId, { password });
     socket.join(roomId);
     callback({ success: true, roomId });
@@ -69,15 +73,15 @@ io.on("connection", (socket) => {
   socket.on("offer", ({ roomId, offer }) => {
     socket.to(roomId).emit("offer", { senderId: socket.id, offer });
   });
-    // Handle Answer
+  // Handle Answer
   socket.on("answer", ({ roomId, answer }) => {
     socket.to(roomId).emit("answer", { senderId: socket.id, answer });
   });
-    // Handle Ice Candidate
+  // Handle Ice Candidate
   socket.on("ice-candidate", ({ roomId, candidate }) => {
     socket.to(roomId).emit("ice-candidate", { senderId: socket.id, candidate });
   });
-    // Handle User Left
+  // Handle User Left
   socket.on("disconnecting", () => {
     socket.rooms.forEach((room) => {
       if (room !== socket.id) {
