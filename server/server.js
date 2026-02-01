@@ -1,12 +1,8 @@
 import express from "express";
 import cors from "cors";
 import path from "path";
-import { fileURLToPath } from "url";
 import { createServer } from "http";
 import { Server } from "socket.io";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const app = express();
 const httpServer = createServer(app);
@@ -15,13 +11,20 @@ const PORT = process.env.PORT || 5000;
 // Initialize Socket.IO
 const io = new Server(httpServer, {
   cors: {
-    origin: "*", 
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   },
 });
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors(
+    cors({
+      origin: "*",
+      methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    }),
+  ),
+);
 
 // In-memory store for room state
 const rooms = new Map();
@@ -36,7 +39,7 @@ io.on("connection", (socket) => {
     if (rooms.has(roomId)) {
       return callback({ success: false, message: "Room already exists" });
     }
-// Store room details
+    // Store room details
     rooms.set(roomId, { password });
     socket.join(roomId);
     callback({ success: true, roomId });
@@ -69,15 +72,15 @@ io.on("connection", (socket) => {
   socket.on("offer", ({ roomId, offer }) => {
     socket.to(roomId).emit("offer", { senderId: socket.id, offer });
   });
-    // Handle Answer
+  // Handle Answer
   socket.on("answer", ({ roomId, answer }) => {
     socket.to(roomId).emit("answer", { senderId: socket.id, answer });
   });
-    // Handle Ice Candidate
+  // Handle Ice Candidate
   socket.on("ice-candidate", ({ roomId, candidate }) => {
     socket.to(roomId).emit("ice-candidate", { senderId: socket.id, candidate });
   });
-    // Handle User Left
+  // Handle User Left
   socket.on("disconnecting", () => {
     socket.rooms.forEach((room) => {
       if (room !== socket.id) {
@@ -87,13 +90,9 @@ io.on("connection", (socket) => {
   });
 });
 
-// Serve static files from the React app build
-const buildPath = path.join(__dirname, "../client/dist");
-app.use(express.static(buildPath));
-
-// Catch-all to serve the React app
-app.get(/.*/, (req, res) => {
-  res.sendFile(path.join(buildPath, "index.html"));
+// Health check route (recommended)
+app.get("/", (req, res) => {
+  res.json({ status: "Backend running 🚀" });
 });
 
 httpServer.listen(PORT, () => {
